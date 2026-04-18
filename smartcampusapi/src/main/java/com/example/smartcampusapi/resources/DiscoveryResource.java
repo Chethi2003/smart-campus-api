@@ -18,6 +18,7 @@ public class DiscoveryResource {
 
         response.put("name", "Smart Campus API");
         response.put("version", "v1");
+        response.put("contact", "admin@smartcampus.com"); 
 
         Map<String, String> endpoints = new HashMap<>();
         endpoints.put("test", "/api/v1/test");
