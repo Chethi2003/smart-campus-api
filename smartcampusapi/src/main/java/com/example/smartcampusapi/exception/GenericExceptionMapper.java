@@ -7,10 +7,10 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class GenericExceptionMapper implements ExceptionMapper<Exception> {
+public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
-    public Response toResponse(Exception ex) {
+    public Response toResponse(Throwable ex) {
 
         ex.printStackTrace();
 

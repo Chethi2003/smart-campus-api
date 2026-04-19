@@ -20,6 +20,8 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
 
-        LOGGER.info("Response Status: " + responseContext.getStatus());
+        LOGGER.info("Response: " + requestContext.getMethod() +
+                " " + requestContext.getUriInfo().getAbsolutePath() +
+                " -> Status: " + responseContext.getStatus());
     }
 }
