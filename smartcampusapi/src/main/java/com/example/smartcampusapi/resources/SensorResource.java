@@ -1,5 +1,6 @@
 package com.example.smartcampusapi.resources;
 
+import com.example.smartcampusapi.exception.LinkedResourceNotFoundException;
 import com.example.smartcampusapi.model.Sensor;
 import com.example.smartcampusapi.model.Room;
 
@@ -12,7 +13,7 @@ public class SensorResource {
 
     public static Map<String, Sensor> sensors = new HashMap<>();
 
-    // GET ALL / FILTER
+    // 🔹 GET ALL / FILTER
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Sensor> getSensors(@QueryParam("type") String type) {
@@ -22,6 +23,7 @@ public class SensorResource {
         }
 
         List<Sensor> filtered = new ArrayList<>();
+
         for (Sensor s : sensors.values()) {
             if (s.getType().equalsIgnoreCase(type)) {
                 filtered.add(s);
@@ -31,7 +33,7 @@ public class SensorResource {
         return filtered;
     }
 
-    // GET BY ID
+    // 🔹 GET BY ID
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,7 +48,7 @@ public class SensorResource {
         return sensor;
     }
 
-    // CREATE SENSOR
+    // 🔹 CREATE SENSOR
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,27 +62,31 @@ public class SensorResource {
             throw new BadRequestException("Room ID is required");
         }
 
-        // CHECK ROOM EXISTS
+        // ✅ CHECK ROOM EXISTS
         Room room = RoomResource.rooms.get(sensor.getRoomId());
         if (room == null) {
-            throw new BadRequestException("Room does not exist");
+            throw new LinkedResourceNotFoundException("Room does not exist");
         }
 
-        // GENERATE STRING ID
+        // ✅ CREATE SENSOR
         String id = UUID.randomUUID().toString();
         sensor.setId(id);
 
-        // DEFAULT VALUES
         sensor.setStatus("ACTIVE");
         sensor.setCurrentValue(0.0);
 
         sensors.put(id, sensor);
 
-        // LINK SENSOR TO ROOM
+        // ✅ LINK SENSOR TO ROOM
         room.getSensorIds().add(id);
 
         return Response.status(Response.Status.CREATED)
                 .entity(sensor)
                 .build();
     }
+    
+    @Path("/{sensorId}/readings")
+public SensorReadingResource getReadingResource(@PathParam("sensorId") String sensorId) {
+    return new SensorReadingResource(sensorId);
+}
 }

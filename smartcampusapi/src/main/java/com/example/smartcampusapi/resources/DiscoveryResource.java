@@ -1,8 +1,11 @@
 package com.example.smartcampusapi.resources;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/")
 public class DiscoveryResource {

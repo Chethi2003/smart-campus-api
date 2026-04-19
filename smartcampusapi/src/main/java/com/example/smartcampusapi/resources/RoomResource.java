@@ -1,5 +1,6 @@
 package com.example.smartcampusapi.resources;
 
+import com.example.smartcampusapi.exception.RoomNotEmptyException;
 import com.example.smartcampusapi.model.Room;
 
 import javax.ws.rs.*;
@@ -11,19 +12,20 @@ public class RoomResource {
 
     public static Map<String, Room> rooms = new HashMap<>();
 
-    // GET ALL
+    // 🔹 GET ALL ROOMS
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Room> getAllRooms() {
         return rooms.values();
     }
 
-    // GET BY ID
+    // 🔹 GET ROOM BY ID
     @GET
-    @Path("/{id}")
+    @Path("/{roomId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Room getRoom(@PathParam("id") String id) {
-        Room room = rooms.get(id);
+    public Room getRoom(@PathParam("roomId") String roomId) {
+
+        Room room = rooms.get(roomId);
 
         if (room == null) {
             throw new NotFoundException("Room not found");
@@ -32,18 +34,18 @@ public class RoomResource {
         return room;
     }
 
-    // CREATE
+    // 🔹 CREATE ROOM
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createRoom(Room room) {
 
         if (room.getName() == null || room.getName().isEmpty()) {
-            throw new BadRequestException("Room name required");
+            throw new BadRequestException("Room name is required");
         }
 
         if (room.getCapacity() <= 0) {
-            throw new BadRequestException("Capacity must be > 0");
+            throw new BadRequestException("Capacity must be greater than 0");
         }
 
         String id = UUID.randomUUID().toString();
@@ -56,22 +58,23 @@ public class RoomResource {
                 .build();
     }
 
-    // DELETE
+    // 🔹 DELETE ROOM
     @DELETE
-    @Path("/{id}")
-    public Response deleteRoom(@PathParam("id") String id) {
+    @Path("/{roomId}")
+    public Response deleteRoom(@PathParam("roomId") String roomId) {
 
-        Room room = rooms.get(id);
+        Room room = rooms.get(roomId);
 
         if (room == null) {
             throw new NotFoundException("Room not found");
         }
 
+        // ❗ BUSINESS RULE
         if (!room.getSensorIds().isEmpty()) {
-            throw new ForbiddenException("Room has sensors, cannot delete");
+            throw new RoomNotEmptyException("Room cannot be deleted because it has sensors");
         }
 
-        rooms.remove(id);
+        rooms.remove(roomId);
 
         return Response.noContent().build();
     }

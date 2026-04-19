@@ -7,20 +7,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+public class RoomNotEmptyExceptionMapper implements ExceptionMapper<RoomNotEmptyException> {
 
     @Override
-    public Response toResponse(Throwable ex) {
-
-        ex.printStackTrace(); // server side only
+    public Response toResponse(RoomNotEmptyException ex) {
 
         ErrorMessage error = new ErrorMessage(
-                "Internal server error",
-                500,
-                "Unexpected failure"
+                ex.getMessage(),
+                409,
+                "Room still has sensors"
         );
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        return Response.status(Response.Status.CONFLICT)
                 .entity(error)
                 .build();
     }

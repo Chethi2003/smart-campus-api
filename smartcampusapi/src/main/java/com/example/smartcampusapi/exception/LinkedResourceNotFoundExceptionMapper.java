@@ -7,20 +7,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+public class LinkedResourceNotFoundExceptionMapper implements ExceptionMapper<LinkedResourceNotFoundException> {
 
     @Override
-    public Response toResponse(Throwable ex) {
-
-        ex.printStackTrace(); // server side only
+    public Response toResponse(LinkedResourceNotFoundException ex) {
 
         ErrorMessage error = new ErrorMessage(
-                "Internal server error",
-                500,
-                "Unexpected failure"
+                ex.getMessage(),
+                422,
+                "Linked resource not found"
         );
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        return Response.status(422)
                 .entity(error)
                 .build();
     }
