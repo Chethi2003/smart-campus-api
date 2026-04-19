@@ -7,12 +7,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+public class GenericExceptionMapper implements ExceptionMapper<Exception> {
 
     @Override
-    public Response toResponse(Throwable ex) {
+    public Response toResponse(Exception ex) {
 
-        ex.printStackTrace(); // server side only
+        ex.printStackTrace();
 
         ErrorMessage error = new ErrorMessage(
                 "Internal server error",
