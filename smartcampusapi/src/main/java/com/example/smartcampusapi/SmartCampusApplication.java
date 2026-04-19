@@ -7,6 +7,6 @@ import javax.ws.rs.ApplicationPath;
 public class SmartCampusApplication extends ResourceConfig {
 
     public SmartCampusApplication() {
-        packages("com.example.smartcampusapi.resources");
+        packages("com.example.smartcampusapi");
     }
 }
