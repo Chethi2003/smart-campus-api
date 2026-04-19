@@ -3,66 +3,76 @@ package com.example.smartcampusapi.resources;
 import com.example.smartcampusapi.model.Room;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.*;
 import java.util.*;
 
 @Path("/rooms")
 public class RoomResource {
 
-    private static Map<Integer, Room> rooms = new HashMap<>();
-    private static int idCounter = 1;
+    public static Map<String, Room> rooms = new HashMap<>();
 
-    // GET ALL ROOMS
+    // GET ALL
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Room> getAllRooms() {
         return rooms.values();
     }
 
-    // GET ROOM BY ID
+    // GET BY ID
     @GET
-@Path("/{id}")
-@Produces(MediaType.APPLICATION_JSON)
-public Room getRoom(@PathParam("id") int id) {
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Room getRoom(@PathParam("id") String id) {
+        Room room = rooms.get(id);
 
-    Room room = rooms.get(id);
+        if (room == null) {
+            throw new NotFoundException("Room not found");
+        }
 
-    if (room == null) {
-        throw new NotFoundException("Room with ID " + id + " not found");
+        return room;
     }
 
-    return room;
-}
-
-    // CREATE ROOM
+    // CREATE
     @POST
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public Room createRoom(Room room) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createRoom(Room room) {
 
-    if (room.getName() == null || room.getName().isEmpty()) {
-        throw new BadRequestException("Room name is required");
+        if (room.getName() == null || room.getName().isEmpty()) {
+            throw new BadRequestException("Room name required");
+        }
+
+        if (room.getCapacity() <= 0) {
+            throw new BadRequestException("Capacity must be > 0");
+        }
+
+        String id = UUID.randomUUID().toString();
+        room.setId(id);
+
+        rooms.put(id, room);
+
+        return Response.status(Response.Status.CREATED)
+                .entity(room)
+                .build();
     }
 
-    if (room.getCapacity() <= 0) {
-        throw new BadRequestException("Capacity must be greater than 0");
-    }
-
-    room.setId(idCounter++);
-    rooms.put(room.getId(), room);
-
-    return room;
-}
-
-    // DELETE ROOM
+    // DELETE
     @DELETE
-@Path("/{id}")
-public void deleteRoom(@PathParam("id") int id) {
+    @Path("/{id}")
+    public Response deleteRoom(@PathParam("id") String id) {
 
-    Room removed = rooms.remove(id);
+        Room room = rooms.get(id);
 
-    if (removed == null) {
-        throw new NotFoundException("Room not found");
+        if (room == null) {
+            throw new NotFoundException("Room not found");
+        }
+
+        if (!room.getSensorIds().isEmpty()) {
+            throw new ForbiddenException("Room has sensors, cannot delete");
+        }
+
+        rooms.remove(id);
+
+        return Response.noContent().build();
     }
-}
 }

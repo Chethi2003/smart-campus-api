@@ -1,4 +1,4 @@
-package com.example.smartcampusapi;
+package com.example.smartcampusapi.config;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.ApplicationPath;
