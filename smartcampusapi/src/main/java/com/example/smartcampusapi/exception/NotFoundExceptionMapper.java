@@ -3,6 +3,7 @@ package com.example.smartcampusapi.exception;
 import com.example.smartcampusapi.model.ErrorMessage;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -21,7 +22,7 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
 
         return Response.status(Response.Status.NOT_FOUND)
                 .entity(error)
-                .type("application/json")
+                .type(MediaType.APPLICATION_JSON)
                 .build();
     }
 }

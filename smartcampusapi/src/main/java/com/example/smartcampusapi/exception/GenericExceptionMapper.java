@@ -21,7 +21,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Exception> {
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(error)
-        .type(MediaType.APPLICATION_JSON)   // 🔥 ADD THIS
+        .type(MediaType.APPLICATION_JSON)  
         .build();
     }
 }
