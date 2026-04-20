@@ -40,11 +40,19 @@ Although the response changes after the first request, the overall system state 
 
 ## Part 3: Sensor Management
 
-### 3.1 @Consumes and Media Type Mismatch
-(answer)
+### 1. Sensor Resource & Integrity - @Consumes and Media Type Mismatch
+The @Consumes(MediaType.APPLICATION_JSON) notation implies that only those requests having data as JSON content may be consumed by the POST method. A request cannot be mapped if data is passed in any other media type like text/plain or application/xml.
 
-### 3.2 QueryParam vs PathParam
-(answer)
+Here, a response containing HTTP 415 – “Unsupported Media Type” will be sent back by JAX-RS without even executing the code of the method because there does not exist any message body reader capable enough to read the incoming request.
+
+This guarantees that the data received by the API is of the correct type only.
+
+### 2. Filtered Retrieval & Search - QueryParam vs PathParam
+Using @QueryParam (/api/v1/sensors?type=CO2) enables us to have an option of having filters that are optional and more flexible. This means that clients can include several filters or even leave them out entirely, in case they require all sensors.
+
+In the second example above, where we use a path variable (/api/v1/sensors/type/CO2), the inclusion of the filter makes the API path less flexible.
+
+The query parameter technique is often seen as more preferable when filtering, since it was intended to search and refine sets, makes clean URLs, and enables you to apply different filters without having to change your endpoint at all.
 
 ---
 
