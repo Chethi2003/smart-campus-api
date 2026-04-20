@@ -6,11 +6,12 @@ import com.example.smartcampusapi.model.Room;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Path("/rooms")
 public class RoomResource {
 
-    public static Map<String, Room> rooms = new HashMap<>();
+    public static Map<String, Room> rooms = new ConcurrentHashMap<>();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

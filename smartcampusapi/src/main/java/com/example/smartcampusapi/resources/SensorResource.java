@@ -7,11 +7,12 @@ import com.example.smartcampusapi.model.Room;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Path("/sensors")
 public class SensorResource {
 
-    public static Map<String, Sensor> sensors = new HashMap<>();
+    public static Map<String, Sensor> sensors = new ConcurrentHashMap<>();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -78,9 +79,9 @@ public class SensorResource {
                 .entity(sensor)
                 .build();
     }
-    
+
     @Path("/{sensorId}/readings")
-public SensorReadingResource getReadingResource(@PathParam("sensorId") String sensorId) {
-    return new SensorReadingResource(sensorId);
-}
+    public SensorReadingResource getReadingResource(@PathParam("sensorId") String sensorId) {
+        return new SensorReadingResource(sensorId);
+    }
 }

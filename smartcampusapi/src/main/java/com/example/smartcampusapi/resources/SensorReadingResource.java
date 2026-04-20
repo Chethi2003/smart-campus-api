@@ -7,10 +7,11 @@ import com.example.smartcampusapi.model.SensorReading;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SensorReadingResource {
 
-    private static Map<String, List<SensorReading>> readingsMap = new HashMap<>();
+    private static Map<String, List<SensorReading>> readingsMap = new ConcurrentHashMap<>();
 
     private String sensorId;
 
@@ -28,7 +29,7 @@ public class SensorReadingResource {
             throw new NotFoundException("Sensor not found");
         }
 
-        return readingsMap.getOrDefault(sensorId, new ArrayList<>());
+        return readingsMap.getOrDefault(sensorId, Collections.emptyList());
     }
 
     @POST
@@ -45,16 +46,17 @@ public class SensorReadingResource {
         if (reading.getValue() <= 0) {
             throw new BadRequestException("Reading value must be > 0");
         }
-        
+
         if ("MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
-    throw new SensorUnavailableException("Sensor is under maintenance");
-}
+            throw new SensorUnavailableException("Sensor is under maintenance");
+        }
 
         reading.setId(UUID.randomUUID().toString());
         reading.setTimestamp(System.currentTimeMillis());
 
         readingsMap
-                .computeIfAbsent(sensorId, k -> new ArrayList<>())
+                .computeIfAbsent(sensorId,
+                        k -> Collections.synchronizedList(new ArrayList<>()))
                 .add(reading);
 
         sensor.setCurrentValue(reading.getValue());

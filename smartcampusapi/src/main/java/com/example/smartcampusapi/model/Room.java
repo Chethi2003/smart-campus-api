@@ -1,6 +1,7 @@
 package com.example.smartcampusapi.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Room {
@@ -8,7 +9,7 @@ public class Room {
     private String id;
     private String name;
     private int capacity;
-    private List<String> sensorIds = new ArrayList<>();
+    private List<String> sensorIds = Collections.synchronizedList(new ArrayList<>());
 
     public Room() {}
 
