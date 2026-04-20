@@ -67,13 +67,27 @@ It means that the application remains easy to understand and extend. On the cont
 
 ---
 
-## Part 5: Exception Handling & Observability
+## Part 5:  Advanced Error Handling, Exception Mapping & Logging
 
-### 5.1 HTTP 422 vs 404
-(answer)
+### 2) Dependency Validation (422 Unprocessable Entity) - HTTP 422 and 404
+A 422 status code is more appropriate here because the client's request is valid as far as its structure is concerned; Anyway there is an issue of invalid data within the request.
 
-### 5.2 Security: Hiding Stack Traces
-(answer)
+Usually 404 is applied to cases where the resource itself does not exist which means that a 404 should be applied to the non-existent endpoint rather than invalid data provided to the server.
 
-### 5.3 Logging Filter
-(answer)
+As such a 422 is more relevant here because the request is correct in its structure while the data within the request is logically erroneous.
+
+### 4) The Global Safety Net (500) -  Hiding Stack Traces
+It is dangerous to display stack traces from Java internally in API endpoints due to the exposure of information on how the program is designed.
+
+A stack trace may show class names, packages, file locations, and method calls that make it easier for an attacker to figure out the architecture of the program. It may even disclose frameworks used, libraries included, or servers running the application like Jersey or Tomcat.
+
+Moreover, a stack trace may provide information about the application's business logic and database connections that an attacker may take advantage of.
+
+This is why APIs should not provide stack traces to clients but rather generic error messages such as those provided in this project via the global exception mapper.
+
+### 5)  API Request & Response Logging Filters - Logging Filter
+Because it allows logging to be contained in one location and does not require calling the Logger.info() method in every resource method.
+
+This gives a cleaner design and easier maintenance because all logging modifications will only need to be made in one class and not in various locations in the whole project. This also guarantees that all requests and responses will have their logs recorded without any missing endpoints.
+
+However doing manual logging for every request and response in every resource method results in repetitive code and is more prone to errors.
