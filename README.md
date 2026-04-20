@@ -50,7 +50,7 @@ This guarantees that the data received by the API is of the correct type only.
 ### 2. Filtered Retrieval & Search - QueryParam vs PathParam
 Using @QueryParam (/api/v1/sensors?type=CO2) enables us to have an option of having filters that are optional and more flexible. This means that clients can include several filters or even leave them out entirely, in case they require all sensors.
 
-In the second example above, where we use a path variable (/api/v1/sensors/type/CO2), the inclusion of the filter makes the API path less flexible.
+In the second example above, where we use a path variable (/api/v1/sensors?type=CO2), the inclusion of the filter makes the API path less flexible.
 
 The query parameter technique is often seen as more preferable when filtering, since it was intended to search and refine sets, makes clean URLs, and enables you to apply different filters without having to change your endpoint at all.
 
