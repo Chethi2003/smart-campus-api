@@ -22,11 +22,19 @@ This method is advantageous for client programmers since they will no longer hav
 
 ## Part 2: Room Management
 
-### 2.1 Returning IDs vs Full Objects
-(answer)
+### 1. Room Resource Implementation - Returning IDs vs Full Objects
+Sending only room IDs will decrease the number of bytes sent back in response, but more requests will be needed on the client side to fetch full data about the rooms.
 
-### 2.2 DELETE Idempotency
-(answer)
+Sending the full objects will require more bandwidth but will simplify interactions between client and server as everything is fetched in one go.
+
+In this example, I use the second approach since it simplifies interactions with clients.
+
+### 2. Room Deletion & Safety Logic - DELETE Idempotency
+Yes. The DELETE operation in this implementation is idempotent which means that making the same DELETE request multiple times results in the same final state of the system.
+
+When a DELETE request is sent for a room that exists but has no sensors, then the room will be removed. Even though the same DELETE request is sent again, the room no longer exists. So the system responds with a NotFoundException (404).
+
+Although the response changes after the first request, the overall system state remains unchanged. So the operation is still considered idempotent.
 
 ---
 
