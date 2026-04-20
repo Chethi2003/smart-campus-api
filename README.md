@@ -15,6 +15,53 @@ The API supports:
 
 The system uses **in-memory data storage** with thread-safe collections to simulate backend operations.
 
+##  Project Structure
+
+```
+smartcampusapi/
+│
+├── config/
+│   └── SmartCampusApplication.java
+│
+├── model/
+│   ├── Room.java
+│   ├── Sensor.java
+│   ├── SensorReading.java
+│   └── ErrorMessage.java
+│
+├── resources/
+│   ├── DiscoveryResource.java
+│   ├── RoomResource.java
+│   ├── SensorResource.java
+│   └── SensorReadingResource.java
+│
+├── exception/
+│   ├── RoomNotEmptyException.java
+│   ├── RoomNotEmptyExceptionMapper.java
+│   ├── LinkedResourceNotFoundException.java
+│   ├── LinkedResourceNotFoundExceptionMapper.java
+│   ├── SensorUnavailableException.java
+│   ├── SensorUnavailableExceptionMapper.java
+│   ├── BadRequestExceptionMapper.java
+│   ├── NotFoundExceptionMapper.java
+│   ├── NotAllowedExceptionMapper.java
+│   └── GenericExceptionMapper.java
+│
+├── filter/
+│   └── LoggingFilter.java
+│
+├── pom.xml
+└── README.md
+```
+
+###  Description
+
+* **config/** → JAX-RS application configuration
+* **model/** → Data models (Room, Sensor, SensorReading)
+* **resources/** → REST API endpoints
+* **exception/** → Custom exceptions and mappers
+* **filter/** → Request/response logging filter
+
 ---
 
 ## Setup & Run Instructions
