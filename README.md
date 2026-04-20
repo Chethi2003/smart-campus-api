@@ -1,3 +1,213 @@
+# Smart Campus API
+
+## Overview
+
+The Smart Campus API is a RESTful web service developed using **JAX-RS (Jersey)**. It manages campus resources such as rooms, sensors, and sensor readings.
+
+The API supports:
+
+* Room management
+* Sensor registration and linking
+* Sensor reading history tracking
+* Filtering and search
+* Structured error handling
+* Request/response logging
+
+The system uses **in-memory data storage** with thread-safe collections to simulate backend operations.
+
+---
+
+## Setup & Run Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/smart-campus-api.git
+cd smart-campus-api
+```
+
+### 2. Build the Project
+
+Make sure Maven is installed, then run:
+
+```bash
+mvn clean install
+```
+
+### 3. Deploy to Server
+
+* Open the project in **NetBeans / IntelliJ**
+* Deploy to **Apache Tomcat (or TomEE)**
+* Ensure the application is running at:
+
+```
+http://localhost:8080/SmartCampusApi/api/v1
+```
+
+---
+
+## Base URL
+
+```
+http://localhost:8080/SmartCampusApi/api/v1
+```
+
+---
+
+## API Endpoints
+
+### Discovery
+
+```
+GET /api/v1
+```
+
+### Rooms
+
+```
+GET    /api/v1/rooms
+POST   /api/v1/rooms
+GET    /api/v1/rooms/{roomId}
+DELETE /api/v1/rooms/{roomId}
+```
+
+### Sensors
+
+```
+GET    /api/v1/sensors
+GET    /api/v1/sensors?type=CO2
+POST   /api/v1/sensors
+GET    /api/v1/sensors/{id}
+```
+
+### Sensor Readings
+
+```
+GET  /api/v1/sensors/{sensorId}/readings
+POST /api/v1/sensors/{sensorId}/readings
+```
+
+---
+
+## Sample CURL Commands
+
+### 1. Create a Room
+
+```bash
+curl -X POST http://localhost:8080/SmartCampusApi/api/v1/rooms \
+-H "Content-Type: application/json" \
+-d '{
+  "id": "LIB-301",
+  "name": "Library Study Room",
+  "capacity": 50
+}'
+```
+
+---
+
+### 2. Get All Rooms
+
+```bash
+curl http://localhost:8080/SmartCampusApi/api/v1/rooms
+```
+
+---
+
+### 3. Create a Sensor
+
+```bash
+curl -X POST http://localhost:8080/SmartCampusApi/api/v1/sensors \
+-H "Content-Type: application/json" \
+-d '{
+  "id": "TEMP-001",
+  "type": "Temperature",
+  "status": "ACTIVE",
+  "roomId": "LIB-301"
+}'
+```
+
+---
+
+### 4. Filter Sensors by Type
+
+```bash
+curl "http://localhost:8080/SmartCampusApi/api/v1/sensors?type=Temperature"
+```
+
+---
+
+### 5. Add Sensor Reading
+
+```bash
+curl -X POST http://localhost:8080/SmartCampusApi/api/v1/sensors/TEMP-001/readings \
+-H "Content-Type: application/json" \
+-d '{
+  "value": 25.5
+}'
+```
+
+---
+
+### 6. Get Sensor Readings
+
+```bash
+curl http://localhost:8080/SmartCampusApi/api/v1/sensors/TEMP-001/readings
+```
+
+---
+
+## Error Handling
+
+The API uses custom exception mappers to return structured JSON errors.
+
+Example:
+
+```json
+{
+  "errorMessage": "Room does not exist",
+  "errorCode": 422,
+  "documentation": "Linked resource not found"
+}
+```
+
+---
+
+## Logging
+
+A custom logging filter logs:
+
+* Incoming HTTP method + URL
+* Outgoing response status
+
+Example:
+
+```
+Incoming Request: POST /api/v1/sensors
+Response Status: 201
+```
+
+---
+
+## Design Notes
+
+* Uses **Sub-resource locator pattern** for nested endpoints
+* Supports **query parameter filtering**
+* Maintains **historical sensor readings**
+* Uses **thread-safe collections** for concurrency safety
+
+---
+
+## Author
+
+* Name: Chethina Kovida Fernando
+* UOW ID: w2119865
+* IIT ID: 20240331
+* Module: Client-Server Architecture
+
+---
+
+# Q&A 
+
 ### ”Smart Campus” Sensor & Room Management API
 
 ## Part 1: Service Architecture & Setup
