@@ -1,6 +1,7 @@
 package com.example.smartcampusapi.exception;
 
 import com.example.smartcampusapi.model.ErrorMessage;
+import javax.ws.rs.core.MediaType;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -20,6 +21,7 @@ public class LinkedResourceNotFoundExceptionMapper implements ExceptionMapper<Li
 
         return Response.status(422)
                 .entity(error)
+                .type(MediaType.APPLICATION_JSON) 
                 .build();
     }
 }

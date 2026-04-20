@@ -18,7 +18,6 @@ public class SensorReadingResource {
         this.sensorId = sensorId;
     }
 
-    // 🔹 GET ALL READINGS
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<SensorReading> getReadings() {
@@ -32,7 +31,6 @@ public class SensorReadingResource {
         return readingsMap.getOrDefault(sensorId, new ArrayList<>());
     }
 
-    // 🔹 ADD READING
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,7 +50,6 @@ public class SensorReadingResource {
     throw new SensorUnavailableException("Sensor is under maintenance");
 }
 
-        // ✅ Generate ID + timestamp
         reading.setId(UUID.randomUUID().toString());
         reading.setTimestamp(System.currentTimeMillis());
 
@@ -60,7 +57,6 @@ public class SensorReadingResource {
                 .computeIfAbsent(sensorId, k -> new ArrayList<>())
                 .add(reading);
 
-        // 🔥 REQUIRED BY CW
         sensor.setCurrentValue(reading.getValue());
 
         return Response.status(Response.Status.CREATED)

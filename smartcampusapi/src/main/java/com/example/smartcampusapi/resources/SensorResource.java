@@ -13,7 +13,6 @@ public class SensorResource {
 
     public static Map<String, Sensor> sensors = new HashMap<>();
 
-    // 🔹 GET ALL / FILTER
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Sensor> getSensors(@QueryParam("type") String type) {
@@ -33,7 +32,6 @@ public class SensorResource {
         return filtered;
     }
 
-    // 🔹 GET BY ID
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +46,6 @@ public class SensorResource {
         return sensor;
     }
 
-    // 🔹 CREATE SENSOR
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,13 +59,11 @@ public class SensorResource {
             throw new BadRequestException("Room ID is required");
         }
 
-        // ✅ CHECK ROOM EXISTS
         Room room = RoomResource.rooms.get(sensor.getRoomId());
         if (room == null) {
             throw new LinkedResourceNotFoundException("Room does not exist");
         }
 
-        // ✅ CREATE SENSOR
         String id = UUID.randomUUID().toString();
         sensor.setId(id);
 
@@ -77,7 +72,6 @@ public class SensorResource {
 
         sensors.put(id, sensor);
 
-        // ✅ LINK SENSOR TO ROOM
         room.getSensorIds().add(id);
 
         return Response.status(Response.Status.CREATED)

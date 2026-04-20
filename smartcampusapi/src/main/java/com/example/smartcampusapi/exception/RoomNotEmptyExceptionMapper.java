@@ -1,6 +1,7 @@
 package com.example.smartcampusapi.exception;
 
 import com.example.smartcampusapi.model.ErrorMessage;
+import javax.ws.rs.core.MediaType;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -20,6 +21,7 @@ public class RoomNotEmptyExceptionMapper implements ExceptionMapper<RoomNotEmpty
 
         return Response.status(Response.Status.CONFLICT)
                 .entity(error)
+                .type(MediaType.APPLICATION_JSON) 
                 .build();
     }
 }

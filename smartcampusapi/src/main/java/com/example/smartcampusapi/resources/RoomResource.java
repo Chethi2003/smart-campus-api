@@ -12,14 +12,12 @@ public class RoomResource {
 
     public static Map<String, Room> rooms = new HashMap<>();
 
-    // 🔹 GET ALL ROOMS
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Room> getAllRooms() {
         return rooms.values();
     }
 
-    // 🔹 GET ROOM BY ID
     @GET
     @Path("/{roomId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,7 +32,6 @@ public class RoomResource {
         return room;
     }
 
-    // 🔹 CREATE ROOM
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,7 +55,6 @@ public class RoomResource {
                 .build();
     }
 
-    // 🔹 DELETE ROOM
     @DELETE
     @Path("/{roomId}")
     public Response deleteRoom(@PathParam("roomId") String roomId) {
@@ -69,7 +65,6 @@ public class RoomResource {
             throw new NotFoundException("Room not found");
         }
 
-        // ❗ BUSINESS RULE
         if (!room.getSensorIds().isEmpty()) {
             throw new RoomNotEmptyException("Room cannot be deleted because it has sensors");
         }
