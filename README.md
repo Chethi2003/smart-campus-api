@@ -58,8 +58,12 @@ The query parameter technique is often seen as more preferable when filtering, s
 
 ## Part 4: Sensor Readings
 
-### 4.1 Sub-Resource Locator Benefits
-(answer)
+### 1) Deep Nesting with Sub - Sub Resource Locator Benefits
+With regard to the Sub Resource Locator design pattern any request to access nested resource like (/sensors/{id}/reading) can be assigned to another class known as SensorReadingResource rather than implementing it all within one controller.
+
+In other words such design ensures that responsibilities are assigned effectively since each class does what it was meant to do. For instance the responsibility of SensorResource will be managing sensor while SensorReadingResource will focus on managing readings.
+
+It means that the application remains easy to understand and extend. On the contrary a situation where everything will be done in a single controller would result in highly complicated and unmanageable system.
 
 ---
 
