@@ -33,28 +33,33 @@ public class RoomResource {
         return room;
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createRoom(Room room) {
+   @POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response createRoom(Room room) {
 
-        if (room.getName() == null || room.getName().isEmpty()) {
-            throw new BadRequestException("Room name is required");
-        }
-
-        if (room.getCapacity() <= 0) {
-            throw new BadRequestException("Capacity must be greater than 0");
-        }
-
-        String id = UUID.randomUUID().toString();
-        room.setId(id);
-
-        rooms.put(id, room);
-
-        return Response.status(Response.Status.CREATED)
-                .entity(room)
-                .build();
+    if (room.getId() == null || room.getId().isEmpty()) {
+        throw new BadRequestException("Room ID is required");
     }
+
+    if (rooms.containsKey(room.getId())) {
+        throw new BadRequestException("Room ID already exists");
+    }
+
+    if (room.getName() == null || room.getName().isEmpty()) {
+        throw new BadRequestException("Room name is required");
+    }
+
+    if (room.getCapacity() <= 0) {
+        throw new BadRequestException("Capacity must be greater than 0");
+    }
+
+    rooms.put(room.getId(), room);
+
+    return Response.status(Response.Status.CREATED)
+            .entity(room)
+            .build();
+}
 
     @DELETE
     @Path("/{roomId}")

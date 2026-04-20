@@ -47,39 +47,53 @@ public class SensorResource {
         return sensor;
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createSensor(Sensor sensor) {
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response createSensor(Sensor sensor) {
 
-        if (sensor.getType() == null || sensor.getType().isEmpty()) {
-            throw new BadRequestException("Sensor type is required");
-        }
-
-        if (sensor.getRoomId() == null || sensor.getRoomId().isEmpty()) {
-            throw new BadRequestException("Room ID is required");
-        }
-
-        Room room = RoomResource.rooms.get(sensor.getRoomId());
-        if (room == null) {
-            throw new LinkedResourceNotFoundException("Room does not exist");
-        }
-
-        String id = UUID.randomUUID().toString();
-        sensor.setId(id);
-
-        sensor.setStatus("ACTIVE");
-        sensor.setCurrentValue(0.0);
-
-        sensors.put(id, sensor);
-
-        room.getSensorIds().add(id);
-
-        return Response.status(Response.Status.CREATED)
-                .entity(sensor)
-                .build();
+    if (sensor.getId() == null || sensor.getId().isEmpty()) {
+        throw new BadRequestException("Sensor ID is required");
     }
 
+    if (sensors.containsKey(sensor.getId())) {
+        throw new BadRequestException("Sensor ID already exists");
+    }
+
+    if (sensor.getType() == null || sensor.getType().isEmpty()) {
+        throw new BadRequestException("Sensor type is required");
+    }
+
+    if (sensor.getRoomId() == null || sensor.getRoomId().isEmpty()) {
+        throw new BadRequestException("Room ID is required");
+    }
+
+    // ✅ Validate status instead of forcing it
+    if (sensor.getStatus() == null || sensor.getStatus().isEmpty()) {
+        throw new BadRequestException("Sensor status is required");
+    }
+
+    List<String> validStatuses = Arrays.asList("ACTIVE", "MAINTENANCE", "OFFLINE");
+    if (!validStatuses.contains(sensor.getStatus().toUpperCase())) {
+        throw new BadRequestException("Invalid sensor status");
+    }
+
+    Room room = RoomResource.rooms.get(sensor.getRoomId());
+    if (room == null) {
+        throw new LinkedResourceNotFoundException("Room does not exist");
+    }
+
+    // ✅ Keep system-controlled field only
+    sensor.setCurrentValue(0.0);
+
+    sensors.put(sensor.getId(), sensor);
+
+    room.getSensorIds().add(sensor.getId());
+
+    return Response.status(Response.Status.CREATED)
+            .entity(sensor)
+            .build();
+}
     @Path("/{sensorId}/readings")
     public SensorReadingResource getReadingResource(@PathParam("sensorId") String sensorId) {
         return new SensorReadingResource(sensorId);
