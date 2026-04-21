@@ -1,5 +1,13 @@
 # Smart Campus API
 
+## Author
+
+* Name: Chethina Kovida Fernando
+* UOW ID: w2119865
+* IIT ID: 20240331
+* Module: Client-Server Architecture
+
+---
 ## Overview
 
 The Smart Campus API is a RESTful web service developed using **JAX-RS**. It manages campus resources such as rooms, sensors, and sensor readings.
@@ -244,14 +252,6 @@ Response Status: 201
 
 ---
 
-## Author
-
-* Name: Chethina Kovida Fernando
-* UOW ID: w2119865
-* IIT ID: 20240331
-* Module: Client-Server Architecture
-
----
 
 # Q&A 
 
