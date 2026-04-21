@@ -348,3 +348,7 @@ Because it allows logging to be contained in one location and does not require c
 This gives a cleaner design and easier maintenance because all logging modifications will only need to be made in one class and not in various locations in the whole project. This also guarantees that all requests and responses will have their logs recorded without any missing endpoints.
 
 However doing manual logging for every request and response in every resource method results in repetitive code and is more prone to errors.
+
+#Downloadable Report (PDF):
+[w2119865_report.pdf](https://github.com/user-attachments/files/26926315/w2119865_report.pdf)
+
