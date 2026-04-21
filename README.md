@@ -260,13 +260,13 @@ Response Status: 201
 ## Part 1: Service Architecture & Setup
 
 ### 1. Project & Application Configuration - JAX-RS Resource Lifecycle
-In JAX-RS resources classes follow a per request lifecycle by default which means a new instance of the resource class is created for each incoming HTTP request.So the resource classes are not treated as singletons unless explicitly configured otherwise. 
+In JAX-RS, resource classes follow a per-request lifecycle by default, meaning a new instance of the resource class is created for each incoming HTTP request. Therefore, resource classes are not treated as singletons unless explicitly configured otherwise.
 
-Each request operates on its own instance which avoids shared state at the object level and improves thread safety for resource methods. In Smart Campus application data is stored in a shared static in-memory data structures;(eg: Map<String, Room> , Map<String, Sensor>). Even though each request has its own resource instance these maps are shared across all requests. 
+Each request operates on its own instance, which avoids shared state at the object level and improves thread safety for resource methods. However in the Smart Campus application, data is stored in shared static in-memory data structures such as maps (eg: Map<String, Room> and Map<String, Sensor>). These structures are shared across all requests.
+Since multiple requests can access and modify this shared data concurrently, there is a risk of race conditions or inconsistent updates. To address this, the implementation uses thread-safe collections such as ConcurrentHashMap instead of a standard HashMap. This ensures that concurrent operations are handled safely without causing data corruption.
 
-This allows multiple requests to access and modify the same data at the same time. Because of that there is a risk of race conditions or inconsistent data, if two requests try to update the same entry simultaneously. 
+As a result, the architectural decision of using shared in-memory storage requires proper synchronization, and using ConcurrentHashMap helps maintain data consistency while supporting concurrent access.
 
-So the design requires careful handling of shared datashared data. In a real world system, this can be managed using thread safe collections like ConcurrentHashMap or proper synchronization techniques to ensure that concurrent updates do not cause data loss or corruption.
 
 ### 2. The ”Discovery” Endpoint - HATEOAS 
 Hypermedia, often referred to as HATEOAS, is seen as a key feature of RESTful APIs since it gives the ability for the API to direct the client on how to perform actions using the links contained in the response. In other words, rather than having the client knowing where each resource endpoint URL is hardcoded, the API sends the links.
