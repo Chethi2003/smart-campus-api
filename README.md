@@ -349,6 +349,8 @@ This gives a cleaner design and easier maintenance because all logging modificat
 
 However doing manual logging for every request and response in every resource method results in repetitive code and is more prone to errors.
 
-#Downloadable Report (PDF):
+---
+
+# Downloadable Report (PDF):
 [w2119865_report.pdf](https://github.com/user-attachments/files/26926315/w2119865_report.pdf)
 
